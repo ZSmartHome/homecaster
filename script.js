@@ -6,6 +6,24 @@ const videoSubtitleSourceUrl = document.getElementById(`video-source-subtitle-ur
 
 const getInstance = () => cast.framework.CastContext.getInstance();
 
+const debugLog = (...params) => {
+  console.log(...params);
+  debugger;
+};
+
+const addTrack = (mediaInfo) => {
+  var englishSubtitle = new chrome.cast.media.Track(1, // track ID
+    chrome.cast.media.TrackType.TEXT);
+  englishSubtitle.trackContentId = 'http://192.168.1.35:8080/caption_en.vtt';
+  englishSubtitle.trackContentType = 'text/vtt';
+  englishSubtitle.subtype = chrome.cast.media.TextTrackType.SUBTITLES;
+  englishSubtitle.name = 'English Subtitles';
+  englishSubtitle.language = 'en-US';
+  englishSubtitle.customData = null;
+
+  mediaInfo.tracks = [englishSubtitle];
+};
+
 const beginCast = ({videoUrl, subtitles = []}) => {
   console.log(videoUrl, subtitles);
 
@@ -25,21 +43,30 @@ const beginCast = ({videoUrl, subtitles = []}) => {
     mediaTracks.push(info);
   }
 
-
+  // cast.framework.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
   const mediaInfo = new chrome.cast.media.MediaInfo(videoUrl, /*`video/mpeg`*/);
   mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
   mediaInfo.streamType = chrome.cast.media.StreamType.BUFFERED;
   mediaInfo.textTrackStyle = new chrome.cast.media.TextTrackStyle();
   mediaInfo.tracks = mediaTracks;
 
+  // addTrack(mediaInfo);
   const request = new chrome.cast.media.LoadRequest(mediaInfo);
   if (mediaTracks.length > 0) {
     request.activeTrackIds = [1];
   }
   chrome.cast.requestSession((castSession) => {
-    castSession.loadMedia(request).
-      then(() => console.log(`Load succeed`)).
-      catch((errorCode) => console.log(`Error code: ${errorCode}`));
+    const result = castSession.loadMedia(request, debugLog, debugLog);
+    // debugger;
+    // result.
+    //   then(() => {
+    //     console.log(`Load succeed`);
+    //     debugger;
+    //   }).
+    //   catch((errorCode) => {
+    //     console.log(`Error code: ${errorCode}`);
+    //     debugger;
+    //   });
   }, (e) => {
     console.error(e)
   });
