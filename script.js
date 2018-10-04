@@ -107,8 +107,6 @@ const init = () => {
     evt.preventDefault();
 
     stopCasting();
-
-
   });
 };
 
