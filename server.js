@@ -12,6 +12,10 @@ server.on(`request`, (req, res) => {
   console.log(req.headers);
 
   res.statusCode = 200;
+  res.setHeader(`Access-Control-Allow-Origin`, `*`);
+  res.setHeader(`Access-Control-Allow-Methods`, `GET, HEAD, POST, OPTIONS`);
+  res.setHeader(`Access-Control-Allow-Headers`, `Content-Type, Accept`);
+  res.setHeader(`Access-Control-Max-Age`, `3600`);
   if (url.endsWith(`mp4`)) {
     const filePath = path.join(__dirname, 'video/test.mp4');
     const stat = fs.statSync(filePath);
