@@ -6,6 +6,19 @@ const path = require(`path`);
 
 const server = http.createServer();
 
+const sendFile = (res, path, type) => {
+  const filePath = path.join(__dirname,);
+  const stat = fs.statSync(filePath);
+
+  res.setHeader(`Content-Type`, type);
+  res.setHeader(`Content-Length`, stat.size);
+  res.writeHead(200);
+
+  const readStream = fs.createReadStream(filePath);
+  // We replaced all the event handlers with a simple call to readStream.pipe()
+  readStream.pipe(res);
+};
+
 server.on(`request`, (req, res) => {
   const url = req.url || ``;
   console.log(`got request to: ${url}`);
@@ -17,27 +30,9 @@ server.on(`request`, (req, res) => {
   res.setHeader(`Access-Control-Allow-Headers`, `Content-Type, Accept`);
   res.setHeader(`Access-Control-Max-Age`, `3600`);
   if (url.endsWith(`mp4`)) {
-    const filePath = path.join(__dirname, `video/test.mp4`);
-    const stat = fs.statSync(filePath);
-
-    res.setHeader(`Content-Type`, `video/mp4`);
-    res.setHeader(`Content-Length`, stat.size);
-    res.writeHead(200);
-
-    const readStream = fs.createReadStream(filePath);
-    // We replaced all the event handlers with a simple call to readStream.pipe()
-    readStream.pipe(res);
+    sendFile(res, `video/test.mp4`, `video/mp4`);
   } else if (url.endsWith(`vtt`)) {
-    const filePath = path.join(__dirname, `video/video.vtt`);
-    const stat = fs.statSync(filePath);
-
-    res.setHeader(`Content-Type`, `text/vtt`);
-    res.setHeader(`Content-Length`, stat.size);
-    res.writeHead(200);
-
-    const readStream = fs.createReadStream(filePath);
-    // We replaced all the event handlers with a simple call to readStream.pipe()
-    readStream.pipe(res);
+    sendFile(res, `video/video.vtt`, `text/vtt`);
   } else {
     res.setHeader(`Content-Type`, `text/plain`);
     res.end(`Hello World\n`);
