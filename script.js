@@ -1,4 +1,4 @@
-const stopAllButton = document.getElementById(`video-stop-current-activity-button`);
+const stopCastButton = document.getElementById(`video-stop-cast-button`);
 const startCastButton = document.getElementById(`video-start-cast-button`);
 
 const videoSourceUrl = document.getElementById(`video-source-url`);
@@ -129,7 +129,7 @@ const initNewWay = () => {
 const init = () => {
   initNewWay();
 
-  stopAllButton.addEventListener(`click`, (evt) => {
+  stopCastButton.addEventListener(`click`, (evt) => {
     evt.stopPropagation();
     evt.preventDefault();
 
