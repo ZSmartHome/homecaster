@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <title>HomeCaster</title>
     <link rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+    <script type="text/javascript"
+            src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 </head>
 <body>
-<form>
+<form class="container">
     <fieldset class="video">
         <legend>Video source</legend>
-        <div>
-            <label>
-                Source:
-                <input class="video__source" type="text" id="video-source-url" value="http://192.168.1.35:8080/video.mp4">
-            </label>
+        <div class="panel__group">
+            <label class="panel__label" for="video-source-url">Source:</label>
+            <input class="panel__input" type="text" id="video-source-url"
+                   value="http://192.168.1.35:8080/video.mp4" autocomplete="off">
         </div>
-        <div>
-            <label>
-                Subtitles:
-                <input class="video__source" type="text" id="video-source-subtitle-url" value="https://soap4.me/subs/12/103130/1.srt">
-            </label>
+        <div class="panel__group">
+            <label class="panel__label" for="video-source-subtitle-url">Subtitles:</label>
+            <input class="panel__input" type="text" id="video-source-subtitle-url"
+                   value="https://soap4.me/subs/12/103130/1.srt" autocomplete="off">
         </div>
         <button id="video-start-cast-button">Start cast</button>
     </fieldset>

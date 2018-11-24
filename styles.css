@@ -1,3 +1,38 @@
-.video__source {
-    width: 800px;
+.container {
+    max-width: 800px;
+    min-width: 400px;
+    margin: 0 auto;
+}
+
+.panel__group {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: flex-end;
+}
+
+.panel__label {
+    display: block;
+
+    font-family: sans-serif, Arial;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 1.2em;
+
+    min-width: 15%;
+}
+
+.panel__input {
+    width: 100%;
+
+    display: inline;
+    vertical-align: bottom;
+    flex-grow: 1;
+
+    font-family: sans-serif, Arial;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1.3em;
+
+    border: 2px #747474 solid;
 }
