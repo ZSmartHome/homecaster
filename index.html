@@ -22,19 +22,16 @@
                    value="https://soap4.me/subs/12/103130/1.srt" autocomplete="off">
         </div>
     </fieldset>
-    <fieldset class="video-player panel">
+    <fieldset class="player panel">
         <legend>Video Player</legend>
         <div class="panel__group">
             <button id="video-start-cast-button">Start cast</button>
             <button id="video-stop-cast-button">Stop Cast</button>
             <button id="video-play-pause-button">Play/Pause</button>
+            <label class="player__status"><input class="panel__input" type="text" id="video-current-state-input"
+                   value="" disabled autocomplete="off"></label>
             <button id="video-volume-up-button">+</button>
             <button id="video-volume-down-button">–</button>
-        </div>
-        <div class="panel__group">
-            <label class="panel__label" for="video-current-state-input">Status:</label>
-            <input class="panel__input" type="text" id="video-current-state-input"
-                   value="" disabled autocomplete="off">
         </div>
         <div class="panel__group">
             <label class="panel__label" for="video-current-volume-input">Volume:</label>
