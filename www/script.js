@@ -6,9 +6,10 @@ const videoSubtitleSourceUrl = document.getElementById(`video-source-subtitle-ur
 
 const getInstance = () => cast.framework.CastContext.getInstance();
 
-const debugLog = (...params) => {
-  console.log(...params);
-  debugger;
+const statusInput = document.getElementById(`video-current-state-input`);
+const printStatus = (status, ...params) => {
+  console.debug(status, ...params);
+  statusInput.value = status;
 };
 
 const addTrack = (mediaInfo) => {
@@ -27,28 +28,11 @@ const addTrack = (mediaInfo) => {
 const beginCast = ({videoUrl, subtitles = []}) => {
   console.log(videoUrl, subtitles);
 
-  const mediaTracks = [];
-  for (let i = 0; i < subtitles.length; i++) {
-    const {url, lang} = subtitles[i];
-
-    const info = new chrome.cast.media.Track(i + 1, // track ID
-      chrome.cast.media.TrackType.TEXT);
-    info.trackContentId = url;
-    info.trackContentType = `text/plain`;
-    info.subtype = chrome.cast.media.TextTrackType.SUBTITLES;
-    info.name = `${lang} language`;
-    info.lang = lang;
-    info.customData = null;
-
-    mediaTracks.push(info);
-  }
-
   // cast.framework.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
   const mediaInfo = new chrome.cast.media.MediaInfo(videoUrl, /*`video/mpeg`*/);
   mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
   mediaInfo.streamType = chrome.cast.media.StreamType.BUFFERED;
   mediaInfo.textTrackStyle = new chrome.cast.media.TextTrackStyle();
-  mediaInfo.tracks = mediaTracks;
 
   // addTrack(mediaInfo);
   const request = new chrome.cast.media.LoadRequest(mediaInfo);
@@ -56,17 +40,16 @@ const beginCast = ({videoUrl, subtitles = []}) => {
     request.activeTrackIds = [1];
   }
   chrome.cast.requestSession((castSession) => {
-    const result = castSession.loadMedia(request, debugLog, debugLog);
-    // debugger;
-    // result.
-    //   then(() => {
-    //     console.log(`Load succeed`);
-    //     debugger;
-    //   }).
-    //   catch((errorCode) => {
-    //     console.log(`Error code: ${errorCode}`);
-    //     debugger;
-    //   });
+    const result = castSession.loadMedia(request);
+    result.
+      then(() => {
+        console.log(`Load succeed`);
+        debugger;
+      }).
+      catch((errorCode) => {
+        console.log(`Error code: ${errorCode}`);
+        debugger;
+      });
   }, (e) => {
     console.error(e)
   });
@@ -92,39 +75,74 @@ startCastButton.addEventListener(`click`, (evt) => {
   evt.preventDefault();
 });
 
+const printSessionStatus = (session) => {
+  console.debug(session);
+
+  const PlayerState = chrome.cast.media.PlayerState;
+  printStatus(`status: ${session.status}`);
+
+  const [currentMedia] = session.media || [];
+  if (currentMedia) {
+    const state = currentMedia.playerState;
+
+    switch (state) {
+      case PlayerState.IDLE:
+        printStatus(`player is idle`);
+        break;
+      case PlayerState.PLAYING:
+      case PlayerState.PAUSED:
+      case PlayerState.BUFFERED:
+
+        const currentTime = currentMedia.getEstimatedTime();
+        const info = currentMedia.media;
+
+        const progress = Math.floor((currentTime / info.duration) * 100); // %
+
+        printStatus(`player is ${state} — ${progress}%`);
+        break;
+      default:
+        printStatus(`invalid state: ${state}`);
+    }
+  }
+};
+
+const initNewWay = () => {
+  printStatus(`setting up...`);
+  const sessionRequest = new chrome.cast.SessionRequest(chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
+  const availabilityCallback = (state) => {
+    switch (state) {
+      case chrome.cast.ReceiverAvailability.AVAILABLE:
+        printStatus(`receiver found`);
+        break;
+      case chrome.cast.ReceiverAvailability.UNAVAILABLE:
+        printStatus(`no receivers found`);
+        break;
+      default:
+        printStatus(`unknown status: ${state}`);
+    }
+  };
+  const sessionReceiver = (session) => {
+    printStatus(`got session...`, session);
+
+    printSessionStatus(session);
+  };
+  const apiConfig = new chrome.cast.ApiConfig(sessionRequest,
+    sessionReceiver,
+    availabilityCallback,
+    chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED);
+
+  chrome.cast.initialize(apiConfig,
+    () => printStatus(`initialized`),
+    (e) => printStatus(`error: ${e.message}`, e)
+  );
+};
+
 const stopCasting = () => {
   const castSession = getInstance().getCurrentSession();
   // End the session and pass 'true' to indicate
   // that receiver application should be stopped.
   castSession.endSession(true);
 };
-
-const initOldWay = () => {
-  getInstance().setOptions({
-    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-  });
-
-};
-
-const initNewWay = () => {
-  const sessionRequest = new chrome.cast.SessionRequest(chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
-  const apiConfig = new chrome.cast.ApiConfig(sessionRequest,
-    (session) => {
-    },
-    (e) => {
-      if (e === 'available') {
-        console.log('receiver found');
-      }
-      else {
-        console.log('receiver list empty');
-      }
-    },
-    chrome.cast.AutoJoinPolicy.PAGE_SCOPED);
-
-  chrome.cast.initialize(apiConfig, () => console.log(`Inited successfully`), (e) => console.error(e));
-};
-
 
 const init = () => {
   initNewWay();
@@ -137,6 +155,7 @@ const init = () => {
   });
 };
 
+printStatus(`initializing...`);
 window['__onGCastApiAvailable'] = function (isAvailable) {
   if (isAvailable) {
     init();
