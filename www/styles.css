@@ -47,15 +47,19 @@
     border: 2px #747474 solid;
 }
 
-.video-player {
+.player {
 
 }
 
-.video-player button {
+.player button {
     font-family: sans-serif, Arial;
     font-size: 20px;
     font-weight: normal;
     line-height: 1.3em;
 
     border: 2px #747474 solid;
+}
+
+.player__status {
+    flex-grow: 1;
 }
