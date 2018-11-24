@@ -4,15 +4,25 @@
     margin: 0 auto;
 }
 
+.panel {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
 .panel__group {
     display: flex;
     flex-direction: row;
 
     justify-content: flex-end;
+
+    padding: 2px 0;
 }
 
 .panel__label {
     display: block;
+    margin: auto;
 
     font-family: sans-serif, Arial;
     font-size: 18px;
@@ -29,6 +39,19 @@
     vertical-align: bottom;
     flex-grow: 1;
 
+    font-family: sans-serif, Arial;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1.3em;
+
+    border: 2px #747474 solid;
+}
+
+.video-player {
+
+}
+
+.video-player button {
     font-family: sans-serif, Arial;
     font-size: 20px;
     font-weight: normal;

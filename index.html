@@ -9,7 +9,7 @@
 </head>
 <body>
 <form class="container">
-    <fieldset class="video">
+    <fieldset class="video panel">
         <legend>Video Source</legend>
         <div class="panel__group">
             <label class="panel__label" for="video-source-url">Source:</label>
@@ -22,13 +22,25 @@
                    value="https://soap4.me/subs/12/103130/1.srt" autocomplete="off">
         </div>
     </fieldset>
-    <fieldset class="video-player">
+    <fieldset class="video-player panel">
         <legend>Video Player</legend>
-        <button id="video-start-cast-button">Start cast</button>
-        <button id="video-stop-cast-button">Stop Cast</button>
-        <button id="video-play-pause-button">Play/Pause</button>
-        <button id="video-volume-up-button">+</button>
-        <button id="video-volume-down-button">-</button>
+        <div class="panel__group">
+            <button id="video-start-cast-button">Start cast</button>
+            <button id="video-stop-cast-button">Stop Cast</button>
+            <button id="video-play-pause-button">Play/Pause</button>
+            <button id="video-volume-up-button">+</button>
+            <button id="video-volume-down-button">–</button>
+        </div>
+        <div class="panel__group">
+            <label class="panel__label" for="video-current-state-input">Status:</label>
+            <input class="panel__input" type="text" id="video-current-state-input"
+                   value="" disabled autocomplete="off">
+        </div>
+        <div class="panel__group">
+            <label class="panel__label" for="video-current-volume-input">Volume:</label>
+            <input class="panel__input" type="text" id="video-current-volume-input"
+                   value="" disabled autocomplete="off">
+        </div>
     </fieldset>
 </form>
 
