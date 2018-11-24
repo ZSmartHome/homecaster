@@ -10,7 +10,7 @@
 <body>
 <form class="container">
     <fieldset class="video">
-        <legend>Video source</legend>
+        <legend>Video Source</legend>
         <div class="panel__group">
             <label class="panel__label" for="video-source-url">Source:</label>
             <input class="panel__input" type="text" id="video-source-url"
@@ -21,10 +21,14 @@
             <input class="panel__input" type="text" id="video-source-subtitle-url"
                    value="https://soap4.me/subs/12/103130/1.srt" autocomplete="off">
         </div>
-        <button id="video-start-cast-button">Start cast</button>
     </fieldset>
-    <fieldset>
-        <button id="video-stop-current-activity-button">Stop All</button>
+    <fieldset class="video-player">
+        <legend>Video Player</legend>
+        <button id="video-start-cast-button">Start cast</button>
+        <button id="video-stop-cast-button">Stop Cast</button>
+        <button id="video-play-pause-button">Play/Pause</button>
+        <button id="video-volume-up-button">+</button>
+        <button id="video-volume-down-button">-</button>
     </fieldset>
 </form>
 
