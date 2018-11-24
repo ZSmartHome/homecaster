@@ -36,9 +36,6 @@ const beginCast = ({videoUrl, subtitles = []}) => {
 
   // addTrack(mediaInfo);
   const request = new chrome.cast.media.LoadRequest(mediaInfo);
-  if (mediaTracks.length > 0) {
-    request.activeTrackIds = [1];
-  }
   chrome.cast.requestSession((castSession) => {
     const result = castSession.loadMedia(request);
     result.
