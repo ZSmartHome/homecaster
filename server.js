@@ -1,13 +1,12 @@
 const http = require(`http`);
 const util = require(`util`);
 const fs = require(`fs`);
-const open = util.promisify(fs.open);
 const path = require(`path`);
 
 const server = http.createServer();
 
-const sendFile = (res, path, type) => {
-  const filePath = path.join(__dirname,);
+const sendFile = (res, fPath, type) => {
+  const filePath = path.join(__dirname, fPath);
   const stat = fs.statSync(filePath);
 
   res.setHeader(`Content-Type`, type);
