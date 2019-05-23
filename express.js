@@ -9,12 +9,13 @@ const fs = require(`fs`);
 const options = {};
 
 const passphrase = process.env.password;
-if (passphrase) {
-  options.pfx = fs.readFileSync(`./cert`);
+const secure = passphrase !== undefined;
+if (secure) {
+  options.pfx = fs.readFileSync(`./cert/default.pfx`);
   options.passphrase = passphrase;
 }
 
-const serverType = passphrase ? require(`https`) : require(`http`);
+const serverType = secure ? require(`https`) : require(`http`);
 const server = serverType.createServer(options, app);
 
-server.listen(port, () => console.log(`App is ready at http://localhost:${port}!`));
+server.listen(port, () => console.log(`App is ready at http${secure ? `s` : ``}://localhost:${port}!`));
