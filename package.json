@@ -7,7 +7,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "deploy": "gh-pages -d www"
+    "deploy": "gh-pages -d www",
+    "start": "node express.js"
   },
   "repository": {
     "type": "git",
