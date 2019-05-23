@@ -26,7 +26,7 @@ const addTrack = (mediaInfo) => {
 };
 
 const beginCast = ({videoUrl, subtitles = []}) => {
-  console.log(videoUrl, subtitles);
+  printStatus(videoUrl, subtitles);
 
   // cast.framework.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
   const mediaInfo = new chrome.cast.media.MediaInfo(videoUrl, /*`video/mpeg`*/);
@@ -38,17 +38,17 @@ const beginCast = ({videoUrl, subtitles = []}) => {
   const request = new chrome.cast.media.LoadRequest(mediaInfo);
   chrome.cast.requestSession((castSession) => {
     const result = castSession.loadMedia(request);
-    result.
-      then(() => {
-        console.log(`Load succeed`);
-        debugger;
-      }).
-      catch((errorCode) => {
-        console.log(`Error code: ${errorCode}`);
-        debugger;
+    if (!result) {
+      printStatus(`Load media returned nothing =(`);
+    } else {
+      result.then(() => {
+        printStatus(`Load succeed`);
+      }).catch((errorCode) => {
+        printStatus(`Error code: ${errorCode}`);
       });
+    }
   }, (e) => {
-    console.error(e)
+    printStatus(`Failed to start session`, e);
   });
 
 };
