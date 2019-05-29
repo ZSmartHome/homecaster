@@ -1,5 +1,6 @@
 const fs = require(`fs`);
 const path = require(`path`);
+const https = require(`https`);
 
 const sendFile = (res, fPath, type) => {
   const filePath = path.join(__dirname, fPath);
@@ -28,6 +29,19 @@ module.exports = (req, res) => {
     sendFile(res, `video/test.mp4`, `video/mp4`);
   } else if (url.endsWith(`vtt`)) {
     sendFile(res, `video/video.vtt`, `text/vtt`);
+  } else if (url.endsWith(`proxy`)) {
+    https.get('https://commondatastorage.googleapis.com/gtv-videos-bucket/ED_1280.mp4', (remoteRes) => {
+      console.log('statusCode:', remoteRes.statusCode);
+      console.log('headers:', remoteRes.headers);
+
+      res.setHeader(`Content-Length`, remoteRes.headers[`content-length`]);
+
+      remoteRes.on(`error`, (e) => console.error(e));
+      res.on(`error`, (e) => console.error(e));
+      remoteRes.pipe(res)
+    }).on('error', (e) => {
+      console.error(e);
+    });
   } else {
     res.setHeader(`Content-Type`, `text/plain`);
     res.end(`Hello World\n`);
