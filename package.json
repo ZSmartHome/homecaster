@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/zeckson/homecaster#readme",
   "dependencies": {
-    "express": "4.17.0"
+    "express": "4.17.0",
+    "fluent-ffmpeg": "2.1.2"
   },
   "devDependencies": {
     "gh-pages": "2.0.1"
