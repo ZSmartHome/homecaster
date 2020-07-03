@@ -103,6 +103,8 @@ const printSessionStatus = (session) => {
   }
 };
 
+const MY_MEDIA_ID = '3A1135E6';
+
 const initNewWay = () => {
   printStatus(`setting up...`);
   const sessionRequest = new chrome.cast.SessionRequest(chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
