@@ -23,6 +23,8 @@ ffmpeg -i <url> -c copy -acodec ac3 -map 0 -f mov -movflags frag_keyframe+empty_
 # transcode url to mp4 and pipe output
 ffmpeg -i <url> -c copy -acodec ac3 -map 0 -f mp4 -movflags frag_keyframe+empty_moov+delay_moov+faststart -listen 1 http://127.0.0.1:8080
 
+ffmpeg -hide_banner -c copy -acodec ac3 -map 0 -f ismv -movflags delay_moov -listen 1 http://0.0.0.0:8080 -i <url>
+
 ffmpeg \
   -c copy \ # copy config from input stream 
   -acodec mp3 \ # convert input audio to mp3 (will convert to stereo and ac3 supports 5.1)
